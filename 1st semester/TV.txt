@@ -1,0 +1,13 @@
+Time 19-21
+News1 15-16
+Field of Wonders 20-21
+News2 20-22
+films 15-18
+talk-show 17-23
+17 18 News
+18 19 Movie
+19 20 Series
+20 21 Documentary
+21 22 Late News
+15 16 Morning Show
+18 20 Evening Concert

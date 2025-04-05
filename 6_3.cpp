@@ -15,49 +15,50 @@ private:
     Node* head;
     Node* tail;
 
-    //void Swap(Node* a, Node* b)
-    //{
-    //    if (!a || !b || a == b) return;
+    void Swap(Node* a, Node* b)
+    {
+        if (!a || !b || a == b) return;
 
-    //    if (a->next == b)
-    //    {                                            // a и b - соседние
-    //        a->next = b->next;
-    //        b->prev = a->prev;
-    //        if (b->next) b->next->prev = a;
-    //        if (a->prev) a->prev->next = b;
-    //        b->next = a;
-    //        a->prev = b;
-    //    }
-    //    else if (b->next == a) 
-    //    {                                           // b и a - соседние (переставлены местами)
-    //        b->next = a->next;
-    //        a->prev = b->prev;
-    //        if (a->next) a->next->prev = b;
-    //        if (b->prev) b->prev->next = a;
-    //        a->next = b;
-    //        b->prev = a;
-    //    }
-    //    else 
-    //    {                                           // не соседние узлы
-    //        Node* aPrev = a->prev;
-    //        Node* aNext = a->next;
-    //        Node* bPrev = b->prev;
-    //        Node* bNext = b->next;
+        if (a->next == b)
+        {                                            // a и b - соседние
+            a->next = b->next;
+            b->prev = a->prev;
+            if (b->next) b->next->prev = a;
+            if (a->prev) a->prev->next = b;
+            b->next = a;
+            a->prev = b;
+        }
+        else if (b->next == a) 
+        {                                           // b и a - соседние (переставлены местами)
+            b->next = a->next;
+            a->prev = b->prev;
+            if (a->next) a->next->prev = b;
+            if (b->prev) b->prev->next = a;
+            a->next = b;
+            b->prev = a;
+        }
+        else 
+        {                                           // не соседние узлы
+            Node* aPrev = a->prev;
+            Node* aNext = a->next;
+            Node* bPrev = b->prev;
+            Node* bNext = b->next;
 
-    //        if (aPrev) aPrev->next = b;
-    //        if (aNext) aNext->prev = b;
-    //        if (bPrev) bPrev->next = a;
-    //        if (bNext) bNext->prev = a;
+            if (aPrev) aPrev->next = b;
+            if (aNext) aNext->prev = b;
+            if (bPrev) bPrev->next = a;
+            if (bNext) bNext->prev = a;
 
-    //        std::swap(a->prev, b->prev);
-    //        std::swap(a->next, b->next);
-    //    }
+            std::swap(a->prev, b->prev);
+            std::swap(a->next, b->next);
+        }
 
-    //    if (!a->prev) head = a;
-    //    if (!b->prev) head = b;
-    //    if (!a->next) tail = a;
-    //    if (!b->next) tail = b;
-    //}
+        if (!a->prev) head = a;
+        if (!b->prev) head = b;
+        if (!a->next) tail = a;
+        if (!b->next) tail = b;
+
+    }
 
 public:
     List() : head(nullptr), tail(nullptr) {}
@@ -98,40 +99,125 @@ public:
         cout << endl;
     }
 
-    Node* partition(Node* low, Node* high) 
+    //int size(Node* head, Node* tail)
+    //{
+
+    //    Node* current = head;
+    //    int count = 0;
+    //    while (current && current->next)
+    //    {
+    //        count++;
+    //        current = current->next;
+    //    }
+    //    return count;
+    //}
+
+
+    //void quickSort(Node* head, Node* tail) 
+    //{
+    //    if (!head || !tail || head == tail || head == tail->next) return;
+
+
+    //    bool checkList = 1;
+    //    for (Node* check = this->head; check != this->tail && check->next && checkList; check = check->next)
+    //        checkList = (checkList && check <= check->next);
+    //    if (checkList)
+    //        return;
+
+    //    Node* pivot = tail;
+    //    Node* r = tail;
+    //    Node* l = head;
+    //    bool flagl = 0, flagr = 0;
+
+    //    for (int i = 0; i < size(head, tail) / 2; i++)
+    //    {
+    //        if(pivot->prev)
+    //            pivot = pivot->prev;
+    //    }
+
+    //    while (!flagl)
+    //    {
+    //        auto tl = l, tr = r;
+    //        for (; tr != tail && tr->next; tr = tr->next)
+    //            if (!flagr)
+    //                flagr = (tr == l);
+    //        if (flagr)
+    //            break;
+    //        while (l != r && l->data < pivot->data)
+    //            l = l->next;
+    //        while (l != r && r->data > pivot->data)
+    //            r = r->prev;
+    //        if (l == r && l == head)
+    //            l = l->next;
+    //        if (l == r && l == tail)
+    //            r = r->prev;
+    //        for (; tl != tail && tl->next; tl = tl->next)
+    //            if (!flagl)
+    //                flagl = (tl == r->prev);
+    //        if (flagl)
+    //        {
+    //            Swap(l, r);
+    //            tl = l;
+    //            l = r->next;
+    //            r = tl->prev;
+    //            flagl = 0;
+    //        }
+    //        else
+    //            break;
+    //    }
+
+    //    if (r && r->prev)
+    //        quickSort(head, r->prev);
+    //    if (l && l->next)
+    //        quickSort(l->next, tail);
+    //}
+    int size(Node* head, Node* tail)
     {
-        if (!low || !high || low == high) return low;
-
-        int pivot = high->data;
-        Node* i = low->prev;
-
-        for (Node* j = low; j != high; j = j->next) 
+        Node* current = head;
+        int count = 0;
+        while (current) // исправлено условие
         {
-            if (j->data < pivot)
+            count++;
+            current = current->next;
+        }
+        return count;
+    }
+
+    void quickSort(Node* head, Node* tail)
+    {
+        if (!head || !tail || head == tail || head == tail->next) return;
+
+        bool checkList = 1;
+        for (Node* check = this->head; check != this->tail && check->next && checkList; check = check->next)
+            checkList = (checkList && check <= check->next);
+        if (checkList)
+            return;
+
+        Node* pivot = tail;
+        Node* l = head;
+        Node* r = tail->prev;
+
+        while (l != r)
+        {
+            while (l != tail && l->data < pivot->data) l = l->next;
+            while (r != head && r->data > pivot->data) r = r->prev;
+
+            if (l != r)
             {
-                (i == nullptr) ? i = low : i = i->next;
-                /*Swap(i, j);*/
-                swap(i->data, j->data);
+                if (l != pivot && r != pivot)
+                    Swap(l, r);
             }
         }
 
-        (i == nullptr) ? i = low : i = i->next;
-        /*Swap(i, high);*/
-        swap(i->data, high->data);
-        return i;
+        if (l != pivot)
+            Swap(l, pivot);
+
+        if (l && l->prev)
+            quickSort(head, l->prev);
+        if (l && l->next)
+            quickSort(l->next, tail);
     }
 
-
-    void quickSort(Node* low, Node* high) 
-    {
-        if (!low || !high || low == high || low == high->next) return;
-
-        Node* pivot = partition(low, high);
-        if (pivot && pivot->prev) 
-            quickSort(low, pivot->prev);
-        if (pivot && pivot->next) 
-            quickSort(pivot->next, high);
-    }
 
     Node* GetHead() { return head; }
 
@@ -150,8 +236,6 @@ int main()
 
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-    //list.print();
 
     list.quickSort(list.GetHead(), list.GetTail());
 

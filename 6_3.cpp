@@ -99,83 +99,12 @@ public:
         cout << endl;
     }
 
-    //int size(Node* head, Node* tail)
-    //{
-
-    //    Node* current = head;
-    //    int count = 0;
-    //    while (current && current->next)
-    //    {
-    //        count++;
-    //        current = current->next;
-    //    }
-    //    return count;
-    //}
-
-
-    //void quickSort(Node* head, Node* tail) 
-    //{
-    //    if (!head || !tail || head == tail || head == tail->next) return;
-
-
-    //    bool checkList = 1;
-    //    for (Node* check = this->head; check != this->tail && check->next && checkList; check = check->next)
-    //        checkList = (checkList && check <= check->next);
-    //    if (checkList)
-    //        return;
-
-    //    Node* pivot = tail;
-    //    Node* r = tail;
-    //    Node* l = head;
-    //    bool flagl = 0, flagr = 0;
-
-    //    for (int i = 0; i < size(head, tail) / 2; i++)
-    //    {
-    //        if(pivot->prev)
-    //            pivot = pivot->prev;
-    //    }
-
-    //    while (!flagl)
-    //    {
-    //        auto tl = l, tr = r;
-    //        for (; tr != tail && tr->next; tr = tr->next)
-    //            if (!flagr)
-    //                flagr = (tr == l);
-    //        if (flagr)
-    //            break;
-    //        while (l != r && l->data < pivot->data)
-    //            l = l->next;
-    //        while (l != r && r->data > pivot->data)
-    //            r = r->prev;
-    //        if (l == r && l == head)
-    //            l = l->next;
-    //        if (l == r && l == tail)
-    //            r = r->prev;
-    //        for (; tl != tail && tl->next; tl = tl->next)
-    //            if (!flagl)
-    //                flagl = (tl == r->prev);
-    //        if (flagl)
-    //        {
-    //            Swap(l, r);
-    //            tl = l;
-    //            l = r->next;
-    //            r = tl->prev;
-    //            flagl = 0;
-    //        }
-    //        else
-    //            break;
-    //    }
-
-    //    if (r && r->prev)
-    //        quickSort(head, r->prev);
-    //    if (l && l->next)
-    //        quickSort(l->next, tail);
-    //}
     int size(Node* head, Node* tail)
     {
+
         Node* current = head;
         int count = 0;
-        while (current) // исправлено условие
+        while (current && current->next)
         {
             count++;
             current = current->next;
@@ -183,9 +112,11 @@ public:
         return count;
     }
 
-    void quickSort(Node* head, Node* tail)
+
+    void quickSort(Node* head, Node* tail) 
     {
         if (!head || !tail || head == tail || head == tail->next) return;
+
 
         bool checkList = 1;
         for (Node* check = this->head; check != this->tail && check->next && checkList; check = check->next)
@@ -194,30 +125,52 @@ public:
             return;
 
         Node* pivot = tail;
+        Node* r = tail;
         Node* l = head;
-        Node* r = tail->prev;
+        bool flagl = 0, flagr = 0;
 
-        while (l != r)
+        for (int i = 0; i < size(head, tail) / 2; i++)
         {
-            while (l != tail && l->data < pivot->data) l = l->next;
-            while (r != head && r->data > pivot->data) r = r->prev;
-
-            if (l != r)
-            {
-                if (l != pivot && r != pivot)
-                    Swap(l, r);
-            }
+            if(pivot->prev)
+                pivot = pivot->prev;
         }
 
-        if (l != pivot)
-            Swap(l, pivot);
+        while (!flagl)
+        {
+            auto tl = l, tr = r;
+            for (; tr != tail && tr->next; tr = tr->next)
+                if (!flagr)
+                    flagr = (tr == l);
+            if (flagr)
+                break;
+            while (l != r && l->data < pivot->data)
+                l = l->next;
+            while (l != r && r->data > pivot->data)
+                r = r->prev;
+            if (l == r && l == head)
+                l = l->next;
+            if (l == r && l == tail)
+                r = r->prev;
+            for (; tl != tail && tl->next; tl = tl->next)
+                if (!flagl)
+                    flagl = (tl == r->prev);
+            if (flagl)
+            {
+                Swap(l, r);
+                tl = l;
+                l = r->next;
+                r = tl->prev;
+                flagl = 0;
+            }
+            else
+                break;
+        }
 
-        if (l && l->prev)
-            quickSort(head, l->prev);
+        if (r && r->prev)
+            quickSort(head, r->prev);
         if (l && l->next)
             quickSort(l->next, tail);
     }
-
 
     Node* GetHead() { return head; }
 

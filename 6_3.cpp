@@ -1,4 +1,6 @@
 #include <iostream>
+#include <sstream>
+#include <string>
 using namespace std;
 
 class List
@@ -123,6 +125,9 @@ public:
             checkList = (checkList && check <= check->next);
         if (checkList)
             return;
+        
+        // 8 3 10 14 7 9 2 1 5
+        // 15 3 8 12 1 9 6 11 4 2 10
 
         Node* pivot = tail;
         Node* r = tail;
@@ -152,7 +157,7 @@ public:
             if (l == r && l == tail)
                 r = r->prev;
             for (; tl != tail && tl->next; tl = tl->next)
-                if (!flagl)
+                if (!flagl && r && r->prev)
                     flagl = (tl == r->prev);
             if (flagl)
             {
@@ -160,7 +165,13 @@ public:
                 tl = l;
                 l = r->next;
                 r = tl->prev;
+                if (!tl->prev)this->head = tl;
+                if (!tl->next)this->tail = tl;
+                if (!r->prev)this->head = r;
+                if (!r->next)this->tail = r;
                 flagl = 0;
+                head = this->head;
+                tail = this->tail;
             }
             else
                 break;
@@ -181,14 +192,15 @@ public:
 int main()
 {
     List list;
+    string line;
     int value;
 
-    cout << "Input elements (to stop input non-number): ";
-    while (cin >> value)
-        list.append(value);
+    cout << "Input elements: ";
+    getline(cin, line);
 
-    cin.clear();
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    istringstream iss(line);
+    while (iss >> value)
+        list.append(value);
 
     list.quickSort(list.GetHead(), list.GetTail());
 

@@ -1,4 +1,6 @@
 #include <iostream>
+#include <sstream>
+#include <string>
 using namespace std;
 
 class List
@@ -78,12 +80,17 @@ public:
     }
 };
 
-int main() {
+int main() 
+{
     List list;
+    string line;
     int value;
 
-    cout << "Input elements (to stop input press '!'): ";
-    while (cin >> value && value != '!')
+    cout << "Input elements: ";
+    getline(cin, line);
+
+    istringstream iss(line);
+    while (iss >> value)
         list.append(value);
 
     list.removeDuplicates();

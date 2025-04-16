@@ -12,29 +12,44 @@ int dy[8] = { 2, 1, -1, -2, -2, -1, 1, 2 };
 // Очередь
 class Queue 
 {
+    struct Node
+    {
+        int x, y;
+        Node* next;
+    };
+    Node * front;
+    Node* rear;
 public:
-    int data[MAX][2];
-    int front, rear;
 
-    Queue() { front = rear = 0; }
+    Queue() : front(nullptr), rear(nullptr) {}
 
     void push(int x, int y) 
     {
-        data[rear][0] = x;
-        data[rear][1] = y;
-        rear++;
+        Node* temp = new Node{ x, y, nullptr };
+        if (rear) 
+        {
+            rear->next = temp;
+            rear = temp;
+        }
+        else {
+            front = rear = temp;
+        }
     }
 
     void pop(int& x, int& y)
     {
-        x = data[front][0];
-        y = data[front][1];
-        front++;
+        if (front)
+        {
+            Node* temp = front;
+            x = temp->x;
+            y = temp->y;
+            front = front->next;
+            if (!front) rear = nullptr;
+            delete temp;
+        }
     }
 
-    bool isEmpty() const { return front == rear; }
-
-    void clear() { front = rear = 0; }
+    bool isEmpty() const { return front == nullptr; }
 };
 
 // Преобразование строки (например, A2) в координаты (x, y)

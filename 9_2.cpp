@@ -32,7 +32,29 @@ public:
 
 class orderedGraph : protected Graph
 {
+	vector<int> order;
+
+	bool dfs(int v, vector<bool>& visited, vector<bool>& onStack)
+	{
+		visited[v] = true;
+		onStack[v] = true;
+
+		for (int u : adj[v])
+		{
+			// ищем цикл
+			if (!visited[u])
+				if (!dfs(u, visited, onStack))
+					return false;
+				else if (onStack[u])
+					return false;
+		}
+
+		onStack[v] = false;
+		order.push_back(v);
+		return true;
+	}
 public:
+
 	orderedGraph(int V) : Graph(V) {}
 
 	void addEdge(int u, int v)
@@ -41,6 +63,29 @@ public:
 			if (adj[v][i] == u)
 				return;
 		adj[u].push_back(v);
+	}
+
+	// Топологическая сортировка для всего графа
+	void sort()
+	{
+		vector<bool> visited(V, false), onStack(V, false);
+
+		for (int v = 0; v < V; ++v)
+		{
+			if (!visited[v]) 
+			{
+				if (!dfs(v, visited, onStack))
+				{
+					cout << "The graph contains a cycle, sorting is not possible!\n";
+					return;
+				}
+			}
+		}
+		reverse(order.begin(), order.end());
+
+		for (int el : order)
+			cout << el << " ";
+		cout << endl;
 	}
 
 	void print() { Graph::print(); }
@@ -182,7 +227,6 @@ public:
 
 int main()
 {
-	// Создание графа и его ввод
 	int V;
 	string str;
 	cout << "Input count of vertices: ";
@@ -199,13 +243,24 @@ int main()
 		while (iss >> v)
 			g.addEdge(i, v);
 	}
+	cin.ignore();
 
-	cout << (g.Exist() ? "Euler cycle exists" : "Euler cycle doesn\'t exist") << endl;
+	cout << (g.Exist() ? "Euler cycle exists" : "Euler cycle doesn\'t exist") << "\n\nWork with ordered graph\n";
+
+	cout << "Input count of vertices: ";
+	cin >> V;
+	orderedGraph og(V);
+	cout << "Input adjacency list: " << endl;
+	cin.ignore();
+
+	for (int i = 0; i < V; ++i)
+	{
+		getline(cin, str);
+		istringstream iss(str);
+		int v;
+		while (iss >> v)
+			og.addEdge(i, v);
+	}
+
+	og.sort();
 }
-
-//1 2 4 5
-//0 3 4
-//0 3 4
-//2 4 5
-//0 1 2 3
-//0 3
